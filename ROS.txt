@@ -1,0 +1,31 @@
+# CREATE WORKSPACE AND PACKAGE
+
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_make
+
+cd src
+catkin_create_pkg tutorial std_msgs rospy roscpp
+
+# WRITE CODE, SAVE CODE WITHIN ~/catkin_ws/src/tutorial/src
+
+cd ~/catkin_ws/src/tutorial/src
+sudo chmod gu+x talker.py subscriber.py
+
+# OPEN FILE ~/catkin_ws/src/tutorial/CMakeLists.txt and add
+
+catkin_install_python(PROGRAMS src/talker.py src/subscriber.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+cd ~/catkin_ws
+catkin_make
+
+source ./devel/setup.bash
+
+roscore
+
+rosrun package_name node_name
+
+catkin_create_pkg image_utility cv_bridge sensor_msgs rospy roscpp
+

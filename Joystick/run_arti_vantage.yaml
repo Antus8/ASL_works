@@ -1,0 +1,40 @@
+session_name: run_arti_vantage
+
+environment:
+    ROBOT_IP: ""
+    FOLDER : "test10"
+
+options:
+    default-command: /bin/bash
+
+windows:
+- window_name : run_vantage
+  focus : true
+  layout : tiled
+  shell_command_before:
+    - source ~/catkin_ws_final/devel/setup.bash
+    #- sudo chmod 666 /dev/ttyACM0
+    
+
+  panes:
+
+    - roscore
+    - sleep 2; rosrun joy joy_node
+    - sleep 2; rosrun joy server_joy.py
+    #- sleep 4; roslaunch ssl_slam ssl_slam_L515.launch
+    #- sleep 4; rosrun topic_tools throttle messages /camera/depth/color/points 30
+    #- rosbag record -O /home/$FOLDER/odom.bag /odom
+    #- rosbag record -O /home/$FOLDER/map.bag /map
+    #- rosbag record -O /home/$FOLDER/camera.bag /camera/color/image_raw
+
+#- window_name: bags
+#  focus: true 
+#  layout : tiled
+#  shell_command_before:
+#    - mkdir ~/$FOLDER
+
+#  panes:
+
+#    - rosbag record -O ~/$FOLDER/odom.bag /odom
+#    - rosbag record -O ~/$FOLDER/map.bag /map
+#    - rosbag record -O ~/$FOLDER/camera.bag /camera/color/image_raw

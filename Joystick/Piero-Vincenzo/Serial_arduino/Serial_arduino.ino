@@ -4,9 +4,8 @@
 #define motor_full_speed_fw 127
 #define motor_full_speed_bw -127
 
-#define motor_smoothed_speed_fw -10
-#define motor_smoothed_speed_bw 10
-
+#define motor_smoothed_speed_fw -30
+#define motor_smoothed_speed_bw 30
 /*
 #define slow_forward_right 65
 #define slow_forward_left 193
@@ -34,6 +33,7 @@ void setup() {
   SabertoothTXPinSerial.begin(9600);
 }
 
+
 void loop()
 {
   while (Serial.available()){
@@ -56,7 +56,7 @@ void loop()
     else{
     if(readF >= 1 && readF < 2){
       digitalWrite(13,HIGH);
-      delay(50);
+      delay(50); 
       digitalWrite(13,LOW);
       move_forward(readF);
     }

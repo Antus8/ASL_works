@@ -21,7 +21,8 @@
 #define stop_motors 0
 
 String readS;
-float readF;  //the float convertion of the string 
+float readF;  //the float convertion of the string
+unsigned char buffer[6];
 
 SabertoothSimplified ST;
 
@@ -39,18 +40,16 @@ void loop()
   while (Serial.available()){
     delay(1);  //delay to allow buffer to fill 
     if (Serial.available() >0){
-      char c = Serial.read();  //gets one byte from serial buffer
-      readS += c;
+      if(Serial.readBytes(buffer, sizeof(float)) == sizeof(float)){
+        memcpy(&readF, buffer, sizeof(float));
+      } 
     }
   }
-
   
-  readF = readS.toFloat();
-
-  Serial.print(readF);
-  
-  if (readS.length() >0){
-    if(readS == "0"){
+  Serial.println(readF);
+    
+  //if (readS.length() >0){
+    if(readS == 0,00){
       stop();
     }
     else{
@@ -86,7 +85,7 @@ void loop()
       }
     }
     }
-    }
+    //}
     
     
   readS = "";
@@ -105,44 +104,64 @@ void loop()
 
 void move_forward(float speed){
 
-  if(speed != 1){
-    speed -= 1;
-  }
+  speed -= 1;  //Ex. From 1.27 to 0.27
   
   ST.motor(1,motor_smoothed_speed_fw * speed);
   ST.motor(2,motor_smoothed_speed_fw * speed);
+
+  long a=motor_smoothed_speed_fw * speed;
+    
+  Serial.write("Avanti :");
+  Serial.write(a);
+
 }
 
 void move_right(float speed){
-  if(speed != 2){
-    speed -= 2;
-  }
-  else
-    speed = 1;
+  
+  speed -= 2;
+
   ST.motor(1,motor_smoothed_speed_fw * speed);
   ST.motor(2,motor_smoothed_speed_bw * speed);
+
+  long a=motor_smoothed_speed_fw * speed;
+  long b=motor_smoothed_speed_bw * speed;
+  
+  Serial.write("Destra 1 :");
+  Serial.write(a);
+  Serial.write("\nDestra 2:");
+  Serial.write(b);
 }
 
 void move_left(float speed){
-  if(speed != 4){
-    speed -= 4;
-  }else{
-    speed = 1;
-  }
+
+  speed -= 4;
+
   ST.motor(1,motor_smoothed_speed_bw * speed);
   ST.motor(2,motor_smoothed_speed_fw * speed);
+
+
+  long a=motor_smoothed_speed_fw * speed;
+  long b=motor_smoothed_speed_bw * speed;
+  
+  Serial.write("Sinistra 1 :");
+  Serial.write(a);
+  Serial.write("\nSinistra 2:");
+  Serial.write(b);
 }
 
 void move_backward(float speed){
-  if(speed != 3){
-    speed -= 3;
-  }else{
-    speed = 1;
-  }
+
+  speed -= 3;
   
   ST.motor(1,motor_smoothed_speed_bw * speed);
   ST.motor(2,motor_smoothed_speed_bw * speed);
-}
+
+  long a=motor_smoothed_speed_bw * speed;
+
+  Serial.print(speed);
+  Serial.write("Dietro :");
+  Serial.write(a);
+ }
 
 void stop(){
   ST.motor(1,0);

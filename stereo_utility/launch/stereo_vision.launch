@@ -1,0 +1,19 @@
+<launch>
+    <node pkg="nodelet" type="nodelet" name="pipeline" args="manager" />
+    <node name="left_camera_publisher" pkg="stereo_vision" type="left_camera_publisher" respawn="true">
+        <remap from="left_camera_publisher/left/image_raw"  to="arti_robot/left/image_raw" />
+        <remap from="left_camera_publisher/left/camera_info"  to="arti_robot/left/camera_info" />
+        <remap from="camera_info" to="left/camera_info" />
+    </node>
+
+    <node name="right_camera_publisher" pkg="stereo_vision" type="right_camera_publisher" respawn="true">
+        <remap from="right_camera_publisher/right/image_raw"  to="arti_robot/right/image_raw" />
+        <remap from="right_camera_publisher/right/camera_info"  to="arti_robot/right/camera_info" />
+    </node>
+	<!--<node name="scan_matcher" pkg="stereo_vision" type="scan_matcher" respawn="true" />-->
+    <include file="$(find stereo_image_proc)/launch/stereo_image_proc.launch" ns="arti_robot">
+        <arg name="manager" value="/pipeline" />
+        <arg name="approximate_sync" value="true" />
+
+  </include>
+</launch>

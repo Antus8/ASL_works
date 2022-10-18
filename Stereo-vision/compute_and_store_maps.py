@@ -13,7 +13,7 @@ calib_folder = "CALIBRATION_OUTPUT"
 block_matcher = StereoSGBM()
 camera_pair = CalibratedPair(None, StereoCalibration(input_folder=calib_folder), block_matcher)
 
-CALIBRATION_IMAGES_PATH="calibphotos1"
+CALIBRATION_IMAGES_PATH="CALIBRATION_IMAGES"
 # Specify chessboard parameters
 chessbard_rows = 15
 chessboard_cols = 10
@@ -38,7 +38,7 @@ for path in img_paths:
         _2d_points.append(corners) #append current 2D points
         _3d_points.append(world_points) #3D points are always the same
 
-ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(_3d_points, _2d_points, (im.shape[1],im.shape[0]), None, None)
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(_3d_points, _2d_points, (im.shape[1],im.shape[0]), None, None)
 # QUI HO OTTENUTO I PARAMETRI DI CALIBRAZIONE DELLA SINGOLA CAMERA (left)
 print("* * * Single Camera Calibration finished")
 

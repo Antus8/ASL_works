@@ -30,15 +30,21 @@ bool CameraPublisher::CreatePublishers(const ros::NodeHandle& n) {
 
     if(identifier_ == "left"){
         camera_name_ = "my_left_camera";
-        filename_ = "/home/antonello/stereo_ws/src/utility_stereo_aggregator/videos/video_left.avi"; //left.mp4
-        calib_file_path_ = "file:///home/antonello/stereo_ws/src/utility_stereo_aggregator/calibration/cam_left.yaml";
+        filename_ = "/home/antonello/catkin_ws/src/stereo_vision/videos/left_new.mp4"; //lvideo_left.avi
+        deviceID = 0;
+        apiID = cv::CAP_ANY;      
+        
+        //calib_file_path_ = "file:///home/antonello/catkin_ws/src/stereo_vision/calibration/cam_left.yaml";
+        calib_file_path_ = "file:///home/antonello/catkin_ws/src/stereo_vision/calibration/cam_left.yaml";
         publisher_ = it.advertise("left/image_raw", 1);
         cam_info_publisher_ = nl.advertise<sensor_msgs::CameraInfo>("left/camera_info", 1);
     }
     else {
         camera_name_ = "my_right_camera";
-        filename_ = "/home/antonello/stereo_ws/src/utility_stereo_aggregator/videos/video_right.avi"; //right.mp4
-        calib_file_path_ = "file:///home/antonello/stereo_ws/src/utility_stereo_aggregator/calibration/cam_right.yaml";
+        filename_ = "/home/antonello/catkin_ws/src/stereo_vision/videos/right_new.mp4"; //video_right.avi
+        deviceID = 2;
+        apiID = cv::CAP_ANY;
+        calib_file_path_ = "file:///home/antonello/catkin_ws/src/stereo_vision/calibration/cam_right.yaml";
         publisher_ = it.advertise("right/image_raw", 1);
         cam_info_publisher_ = nl.advertise<sensor_msgs::CameraInfo>("right/camera_info", 1);
     }
@@ -50,7 +56,8 @@ void CameraPublisher::Publish(const ros::NodeHandle& n){
     ros::Rate loop_rate(18);
     ros::NodeHandle nl(n);
 
-    cap_.open(filename_);
+    //cap_.open(deviceID, apiID);
+    cap_.open(filename_); to read stored video
     
     if(!cap_.isOpened()){
         ROS_ERROR("Error reading input stream");
@@ -94,3 +101,8 @@ void CameraPublisher::Publish(const ros::NodeHandle& n){
 }
 }
 
+/*
+roslaunch stereo_vision camera_publishers.launch
+rosrun camera_calibration cameracalibrator.py --approximate 0.1 --size 15x10 --square 0.013 --no-service-check right:=/right_camera_publisher/right/image_raw left:=/left_camera_publisher/left/image_raw right_camera:=/right_camera_publisher/right left_camera:=/left_camera_publisher/left
+
+*/

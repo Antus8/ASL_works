@@ -1,0 +1,10 @@
+<launch>
+    <node pkg="nodelet" type="nodelet" name="pipeline" args="manager" />
+    <node name="left_camera_publisher" pkg="stereo_vision" type="left_camera_publisher" respawn="true">
+        <remap from="camera_info" to="left/camera_info" />
+    </node>
+
+    <node name="right_camera_publisher" pkg="stereo_vision" type="right_camera_publisher" respawn="true">
+    </node>
+
+</launch>
